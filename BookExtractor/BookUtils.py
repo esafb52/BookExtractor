@@ -3,6 +3,7 @@ import os
 from docx import Document
 from docx.shared import Inches
 from docx.shared import Pt
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 
 class BookUtils:
@@ -54,7 +55,7 @@ class BookUtils:
                 all_para = row['all_txt']
                 for para in all_para:
                     paragraph = my_book.add_paragraph(para)
-                    paragraph.alignment = 1
+                    paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
             out_file = os.path.join(out_dir, out_file_name)
             print(out_file)
             my_book.save(out_file)
@@ -79,7 +80,8 @@ class BookUtils:
                 my_book.add_heading(row['head'], level=1)
                 all_para = row['all_txt']
                 for para in all_para:
-                    my_book.add_paragraph(para)
+                    paragraph = my_book.add_paragraph(para)
+                    paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
             out_file = os.path.join(out_dir, out_file_name)
             print(out_file)
             my_book.save(out_file)
