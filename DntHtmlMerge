@@ -1,0 +1,60 @@
+import os
+
+book_title = 'ASP.NET MVC'
+
+
+def body_start():
+    return '''
+            <!DOCTYPE html>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+                <title>{0}</title>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                <link type="text/css" rel="stylesheet" href="styles.css">
+            </head>
+            <body dir='rtl'>
+            '''.format(book_title)
+
+
+def end_body():
+    return '''
+                </body>
+                </html>
+           '''
+
+
+book_dir = 'C:/Users/masiha/Desktop/code'
+start_body_section = "class='main'"
+comment_section = '<h3>نظرات</h3>'
+out_html_file = '{0}.html'.format(book_title)
+write_mode = False
+
+files = os.listdir(book_dir)
+files.sort()
+html_output_file = os.path.join(book_dir, out_html_file)
+result_file = open(html_output_file, 'w', encoding='utf-8')
+result_file.write(body_start())
+
+for this_file in files:
+    this_book = os.path.join(book_dir, this_file)
+    if not this_file.endswith('.html') or out_html_file in this_file:
+        continue
+
+    with open(this_book, 'r', encoding='utf-8') as book:
+        book_content = book.readlines()
+        for line in book_content:
+            this_line = str(line).strip()
+            if comment_section in this_line:
+                write_mode = False
+                result_file.write('<br><br><br>')
+                break
+            if start_body_section in this_line:
+                write_mode = True
+            if '<br>' in this_line:
+                this_line.replace('<br>', '<br>\n')
+            if write_mode:
+                result_file.write(this_line + '\n')
+
+result_file.write(end_body())
+result_file.close()
+print('task complete')
